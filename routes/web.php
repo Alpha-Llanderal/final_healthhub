@@ -2,9 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController; // Corrected line
-
-Auth::routes();
+use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', function () {
     return view('landing');
