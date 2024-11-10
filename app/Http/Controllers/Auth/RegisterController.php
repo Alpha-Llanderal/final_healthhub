@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
@@ -33,13 +34,6 @@ class RegisterController extends Controller
         try {
             // Create user
             $user = $this->create($request->all());
-
-            // Handle profile picture upload
-            if ($request->hasFile('profile_picture')) {
-                $profilePicturePath = $this->uploadProfilePicture($request->file('profile_picture'), $user->id);
-                $user->profile_picture = $profilePicturePath;
-                $user->save();
-            }
 
             // Commit transaction
             DB::commit();
@@ -88,16 +82,16 @@ class RegisterController extends Controller
                 'min:8', 
                 'confirmed'
             ],
-            'birth_date' => ['nullable', 'date'],
-            'profile_picture' => ['nullable', 'image', 'max:2048'],
-            'address' => ['nullable', 'string', 'max:255'],
-            'phone_number' => ['nullable', 'string', 'max:20'],
+            'privacy_policy' => [
+                'required', 
+                'accepted'
+            ]
         ], [
             'email.unique' => 'This email is already registered.',
             'password.min' => 'Password must be at least 8 characters long.',
             'password.confirmed' => 'Password confirmation does not match.',
-            'profile_picture.image' => 'Profile picture must be an image file.',
-            'profile_picture.max' => 'Profile picture must not exceed 2MB.'
+            'privacy_policy.required' => 'You must agree to the Privacy Policy to proceed.',
+            'privacy_policy.accepted' => 'You must agree to the Privacy Policy to proceed.'
         ]);
     }
 
@@ -107,22 +101,7 @@ class RegisterController extends Controller
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'password' => $data['password'], // Will be hashed by mutator
-            'birth_date' => $data['birth_date'] ?? null,
-            'is_self_pay' => $data['is_self_pay'] ?? false,
-            'address' => $data['address'] ?? null,
-            'phone_number' => $data['phone_number'] ?? null,
+            'password' => Hash::make($data['password']), // Securely hash the password
         ]);
-    }
-
-    protected function uploadProfilePicture($file, $userId)
-    {
-        // Generate unique filename
-        $filename = $userId . '_' . time() . '.' . $file->getClientOriginalExtension();
-        
-        // Store file in public storage
-        $path = $file->storeAs('profile_pictures', $filename, 'public');
-        
-        return $path;
     }
 }

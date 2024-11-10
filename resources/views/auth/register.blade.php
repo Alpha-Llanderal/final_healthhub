@@ -111,20 +111,19 @@
                             <!-- Privacy Policy Consent -->
                             <div class="form-check mb-3">
                                 <input type="checkbox" 
-                                       id="privacyPolicy"
-                                       class="form-check-input" 
-                                       name="privacy_policy" 
-                                       required
-                                       data-bs-toggle="tooltip"
-                                       title="You must agree to the Privacy Policy to continue">
+                                    id="privacyPolicy"
+                                    class="form-check-input @error('privacy_policy') is-invalid @enderror" 
+                                    name="privacy_policy" 
+                                    value="1"
+                                    required>
                                 <label class="form-check-label" for="privacyPolicy">
                                     I have read and agree to the 
                                     <a href="{{ route('privacy_policy') }}" target="_blank" class="text-primary">Privacy Policy</a>
                                     <span class="text-danger">*</span>
                                 </label>
-                                <div class="invalid-feedback">
-                                    You must agree to the Privacy Policy to proceed.
-                                </div>
+                                @error('privacy_policy')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <!-- Submit Button -->
