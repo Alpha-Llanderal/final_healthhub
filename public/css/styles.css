@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    padding-top: 70px; /* Height of the fixed header */
+    padding-bottom: 70px; /* Height of the footer */
+}
+
+/* Header */
+header {
+    font-family: 'Poppins', sans-serif;
+    z-index: 1000;
+}
+
+.fw-bold {
+    font-weight: bold;
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: black;
+    text-align: center;
+    z-index: 1000;
+    padding: 10px 15px;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.footer a {
+    color: #004a9f;
+    text-decoration: none;
+}
+
+.footer .contact-details i {
+    color: #004a9f;
+    margin-right: 5px;
+}
+
+/* Responsive Styles */
+@media (max-width: 767px) {
+    .footer .contact-details {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer .contact-details > div {
+        margin-bottom: 5px;
+    }
+
+    .footer .col-md-8, .footer .col-md-4 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .alert {
+        margin-top: 20px;
+    }
+}
+
+@media (min-width: 768px) {
+    .footer {
+        padding: 10px 50px;
+    }
+
+    .footer .contact-details {
+        justify-content: space-between;
+    }
+
+    .footer .col-md-4 {
+        text-align: right;
+    }
+
+    .alert {
+        margin-top: 50px;
+    }
+}
+
+/* Accordion and Forms */
+.accordion-button {
+    padding: 0.75rem 1.25rem;
+}
+
+.accordion-body {
+    padding: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    .accordion-button {
+        padding: 0.5rem 1rem;
+    }
+    .accordion-body {
+        padding: 1rem;
+    }
+}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    font-family: 'Poppins', sans-serif;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.fw-bold {
+    font-weight: bold;
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    color: black;
+    z-index: 1000;
+    padding: 10px 15px;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.footer a {
+    color: #004a9f;
+    text-decoration: none;
+}
+
+.footer .contact-details i {
+    color: #004a9f;
+    margin-right: 5px;
+}
+
+/* Responsive Styles */
+@media (max-width: 767px) {
+    .footer .contact-details {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer .contact-details > div {
+        margin-bottom: 5px;
+    }
+
+    .footer .col-md-8, .footer .col-md-4 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .alert {
+        margin-top: 90px;
+    }
+}
+
+@media (min-width: 768px) {
+    .footer {
+        padding: 10px 50px;
+    }
+
+    .footer .contact-details {
+        justify-content: space-between;
+    }
+
+    .footer .col-md-4 {
+        text-align: right;
+    }
+
+    .alert {
+        margin-top: 90px;
+    }
+}
+
+/* Accordion and Forms */
+.accordion-button {
+    padding: 0.75rem 1.25rem;
+}
+
+.accordion-body {
+    padding: 1.25rem;
+}
+
+/* login.blade.php */
+.min-vh-100 {
+    min-height: 100vh;
+}
+
+.form-floating > label {
+    z-index: 3;
+}
+
+.btn-success {
+    transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
