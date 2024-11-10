@@ -8,7 +8,6 @@
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
-                        
                         <!-- Logo and Title -->
                         <div class="text-center mb-4">
                             <img src="{{ asset('img/logo.png') }}" 
@@ -18,22 +17,38 @@
                             <h2 class="fw-bold">Patient Registration</h2>
                         </div>
 
+                        <!-- Display Messages -->
+                        @if(session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        @if(session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
                         <!-- Registration Form -->
-                        <form method="POST" action="{{ route('register') }}" class="needs-validation" novalidate>
+                        <form method="POST" action="{{ route('register') }}" 
+                              class="needs-validation" 
+                              novalidate 
+                              enctype="multipart/form-data">
                             @csrf
                             
                             <!-- First Name Input -->
                             <div class="form-floating mb-3">
                                 <input type="text" 
                                        id="firstName"
-                                       class="form-control @error('firstName') is-invalid @enderror" 
-                                       name="firstName" 
-                                       value="{{ old('firstName') }}" 
+                                       class="form-control @error('first_name') is-invalid @enderror" 
+                                       name="first_name" 
+                                       value="{{ old('first_name') }}" 
                                        placeholder="Enter your first name" 
                                        required 
                                        autofocus>
                                 <label for="firstName">First Name</label>
-                                @error('firstName')
+                                @error('first_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -42,13 +57,13 @@
                             <div class="form-floating mb-3">
                                 <input type="text" 
                                        id="lastName"
-                                       class="form-control @error('lastName') is-invalid @enderror" 
-                                       name="lastName" 
-                                       value="{{ old('lastName') }}" 
+                                       class="form-control @error('last_name') is-invalid @enderror" 
+                                       name="last_name" 
+                                       value="{{ old('last_name') }}" 
                                        placeholder="Enter your last name" 
                                        required>
                                 <label for="lastName">Last Name</label>
-                                @error('lastName')
+                                @error('last_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -93,11 +108,29 @@
                                 <label for="password_confirmation">Confirm Password</label>
                             </div>
 
+                            <!-- Privacy Policy Consent -->
+                            <div class="form-check mb-3">
+                                <input type="checkbox" 
+                                       id="privacyPolicy"
+                                       class="form-check-input" 
+                                       name="privacy_policy" 
+                                       required
+                                       data-bs-toggle="tooltip"
+                                       title="You must agree to the Privacy Policy to continue">
+                                <label class="form-check-label" for="privacyPolicy">
+                                    I have read and agree to the 
+                                    <a href="{{ route('privacy_policy') }}" target="_blank" class="text-primary">Privacy Policy</a>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="invalid-feedback">
+                                    You must agree to the Privacy Policy to proceed.
+                                </div>
+                            </div>
+
                             <!-- Submit Button -->
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-success btn-lg">
-                                    <i class="bi bi-person-plus-fill me-2"></i>Register
-                                </button>
+                                    <i class="bi bi-person-plus-fill me-2"></i>Register </button>
                             </div>
 
                             <!-- Login Link -->
@@ -118,18 +151,39 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Form validation
-        const forms = document.querySelectorAll('.needs-validation');
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
+document.addEventListener('DOMContentLoaded', function() {
+    // Client-side validation
+    const form = document.querySelector('form');
+    const privacyPolicyCheckbox = document.getElementById('privacyPolicy');
+
+    // Initialize Bootstrap tooltip
+    new bootstrap.Tooltip(privacyPolicyCheckbox);
+
+    // Custom validation function
+    function validatePrivacyPolicy() {
+        if (!privacyPolicyCheckbox.checked) {
+            privacyPolicyCheckbox.classList.add('is-invalid');
+            privacyPolicyCheckbox.setCustomValidity('You must agree to the Privacy Policy');
+            return false;
+        } else {
+            privacyPolicyCheckbox.classList.remove('is-invalid');
+            privacyPolicyCheckbox.setCustomValidity('');
+            return true;
+        }
+    }
+
+    // Add event listeners for validation
+    privacyPolicyCheckbox.addEventListener('change', validatePrivacyPolicy);
+    
+    // Form submission validation
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            if (!validatePrivacyPolicy()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
         });
-    });
+    }
+});
 </script>
 @endpush
