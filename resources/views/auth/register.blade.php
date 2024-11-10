@@ -8,6 +8,7 @@
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
+                        
                         <!-- Logo and Title -->
                         <div class="text-center mb-4">
                             <img src="{{ asset('img/logo.png') }}" 
