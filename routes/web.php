@@ -30,8 +30,8 @@ Route::get('password/reset/{token}', [ResetPasswordController::class, 'showReset
     ->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])
     ->name('password.update');
-    
-////////// do not touch lines above this line //////////
+
+////////// do not touch codes above this line //////////
 
 // Authentication Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])
