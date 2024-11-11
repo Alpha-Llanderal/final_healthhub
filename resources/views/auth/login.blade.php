@@ -34,7 +34,7 @@
                         @endif
 
                         <!-- Login Form -->
-                        <form method="POST" action="{{ route('login.attempt') }}" class="needs-validation" novalidate>
+                        <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate>
                             @csrf
                             
                             <!-- Email Input -->
@@ -71,15 +71,6 @@
                                         <strong>{{ $message }}</strong>
                                     </div>
                                 @enderror
-                            </div>
-
-                            <!-- Remember Me Checkbox -->
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember" 
-                                    {{ old('remember') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="remember">
-                                    Remember Me
-                                </label>
                             </div>
 
                             <!-- Submit Button -->

@@ -8,7 +8,7 @@ use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 
-// Remove any unclosed groups or middleware
+
 Route::get('/', function () {
     return view('landing');
 })->name('landing');
@@ -16,6 +16,22 @@ Route::get('/', function () {
 // Registration Routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
+
+// Privacy Policy
+Route::get('/privacy-policy', [PrivacyPolicyController::class, 'show'])->name('privacy_policy');
+
+// Forgot Password Routes
+Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])
+->name('password.request');
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+->name('password.email');
+// Password Reset Routes
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])
+    ->name('password.update');
+    
+////////// do not touch lines above this line //////////
 
 // Authentication Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])
@@ -30,8 +46,6 @@ Route::post('/logout', [LoginController::class, 'logout'])
     ->name('logout')
     ->middleware('auth');
 
-// Privacy Policy
-Route::get('/privacy-policy', [PrivacyPolicyController::class, 'show'])->name('privacy_policy');
 
 // Dashboard Routes
 Route::middleware(['auth'])->group(function () {
@@ -41,13 +55,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/medical-info', [DashboardController::class, 'quickMedicalInfo'])
          ->name('dashboard.medical-info');
 
-         // Password Reset Routes
-Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])
-->name('password.request');
-Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])
-->name('password.email');
-Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])
-->name('password.reset');
-Route::post('password/reset', [ResetPasswordController::class, 'reset'])
-->name('password.update');
+
 });
