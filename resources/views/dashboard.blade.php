@@ -29,8 +29,10 @@
                             <!-- Profile Picture Upload -->
                             <form action="{{ route('profile.upload') }}" method="POST" enctype="multipart/form-data" id="profilePictureForm">
                                 @csrf
-                                <img id="profilePicture" src="{{ auth()->user()->profile_picture ?? 'https://via.placeholder.com/150' }}" 
-                                     class="rounded-circle img-fluid mb-3 mb-md-0" alt="Profile Picture">
+                                <img id="profilePicture" 
+     src="{{ $user->profile_picture ?? 'https://via.placeholder.com/150' }}" 
+     class="rounded-circle img-fluid mb-3 mb-md-0" 
+     alt="Profile Picture">
                                 <div class="mt-2">
                                     <input type="file" name="profile_picture" id="profilePictureInput" accept="image/*" style="display: none;">
                                     <button type="button" class="btn btn-outline-secondary" id="uploadButton">
@@ -43,134 +45,63 @@
                             <div class="row">
                                 <div class="col-sm-6 mb-3">
                                     <label for="firstName" class="form-label">First Name *</label>
-                                    <input type="text" class="form-control" id="firstName" value="{{ auth()->user()->firstName }}" placeholder="First Name">
+                                    <input type="text" 
+                                    class="form-control" 
+                                    id="firstName" 
+                                    value="{{ $user->first_name }}" 
+                                    placeholder="First Name">
                                 </div>
+
                                 <div class="col-sm-6 mb-3">
                                     <label for="lastName" class="form-label">Last Name *</label>
-                                    <input type="text" class="form-control" id="lastName" value="{{ auth()->user()->lastName }}" placeholder="Last Name">
+                                    <input type="text" 
+                                    class="form-control" 
+                                    id="lastName" 
+                                    value="{{ $user->last_name }}" 
+                                    placeholder="Last Name">
                                 </div>
+
                                 <div class="col-sm-6 mb-3">
                                     <label for="birthDate" class="form-label">Date of Birth *</label>
-                                    <input type="date" class="form-control" id="birthDate" value="{{ auth()->user()->birthDate?->format('Y-m-d') }}" placeholder="DD-MM-YYYY">
+                                    <input type="date" 
+                                    class="form-control" 
+                                    id="birthDate" 
+                                    value="{{ $user->birth_date?->format('Y-m-d') }}" 
+                                    placeholder="DD-MM-YYYY">
                                 </div>
+
                                 <div class="col-sm-6 mb-3">
                                     <label for="email" class="form-label">Email *</label>
-                                    <input type="email" class="form-control" id="email" value="{{ auth()->user()->email }}" placeholder="Email Address">
+                                    <input type="email" 
+                                    class="form-control" 
+                                    id="email" 
+                                        value="{{ $user->email }}" 
+                                    placeholder="Email Address">
                                 </div>
+
+                                <div class="col-sm-6 mb-3">
+                                    <label for="address" class="form-label">Address *</label>
+                                    <input type="address" 
+                                    class="form-control" 
+                                    id="address" 
+                                        value="{{ $user->address }}" 
+                                    placeholder="Address">
+                                </div>
+
+                                <div class="col-sm-6 mb-3">
+                                    <label for="phone_number" class="form-label">Phone Number *</label>
+                                    <input type="phone_number" 
+                                    class="form-control" 
+                                    id="phone_number" 
+                                        value="{{ $user->phone_number }}" 
+                                    placeholder="Phone Number">
+                                </div>
+
+
                             </div>
                         </div>
                     </div>
-                    <!-- Address and Phone Sections -->
-                    <hr class="my-4">
-                    <div class="row">
-                        <!-- Address Section -->
-                        <div class="col-md-6">
-                            <button class="btn btn-outline-primary mb-2" data-bs-toggle="modal" data-bs-target="#addressModal">+ Add Address</button>
-
-                            <!-- Address Modal -->
-                            <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="addressModalLabel">Add New Address</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div id="addressAlert" class="alert alert-danger d-none" role="alert"></div>
-                                            <input type="text" id="addressInput" class="form-control" placeholder="Enter your address">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" id="saveAddressButton">Save Address</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Address Table -->
-                            <div class="table-responsive mt-3">
-                                <div id="addressList" class="mt-3">
-                                <table id="addressesTable" class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Address</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if(auth()->user()->addresses)
-                                            @foreach(auth()->user()->addresses as $address)
-                                            <tr>
-                                                <td>{{ $address->address }}</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-danger delete-address" data-id="{{ $address->id }}">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="2" class="text-center">No addresses found.</td>
-                                            </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Phone Section -->
-                        <div class="col-md-6">
-                            <button class="btn btn-outline-primary mb-2" data-bs-toggle="modal" data-bs-target="#phoneModal">+ Add Phone Number</button>
-
-                            <!-- Phone Number Modal -->
-                            <div class="modal fade" id="phoneModal" tabindex="-1" aria-labelledby="phoneModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="phoneModalLabel">Add New Phone Number</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div id="phoneAlert" class="alert alert-danger d-none" role="alert"></div>
-                                            <input type="text" id="phoneInput" class="form-control" placeholder="Enter your phone number">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" id="savePhoneButton">Save Phone Number</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Phone Table -->
-                            <div class="table-responsive mt-3">
-                                <table id="phonesTable" class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Phone Number</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if(auth()->user()->phone_numbers)
-                                            @foreach(auth()->user()->phone_numbers as $phone)
-                                            <tr>
-                                                <td>{{ $phone->phone_number }}</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-danger delete-phone" data-id="{{ $phone->id }}">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="2" class="text-center">No phone numbers found.</td>
-                                            </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    
                         <!-- Save Changes Button -->
                         <div class="col-12 d-flex justify-content-end mt-3">
                             <button class="btn btn-primary" id="saveChangesButton">Save Changes</button>

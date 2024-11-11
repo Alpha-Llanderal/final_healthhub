@@ -1,7 +1,6 @@
 @extends('layouts.app')
-@section('title', 'HealthHub Connect')
+@section('title', 'HealthHub Connect - Login')
 @section('content')
-
 <main class="d-flex align-items-center min-vh-100">
     <div class="container">
         <div class="row justify-content-center">
@@ -14,10 +13,10 @@
                                  alt="HealthHub Logo" 
                                  class="img-fluid mb-3"
                                  width="150">
-                            <h2 class="fw-bold">Patient Portal</h2>
+                            <h2 class="fw-bold">Patient Portal Login</h2>
                         </div>
 
-                        <!-- Success Message -->
+                        <!-- Success and Error Messages -->
                         @if(session('success'))
                             <div class="alert alert-success alert-dismissible fade show mb-3">
                                 {{ session('success') }}
@@ -25,8 +24,15 @@
                             </div>
                         @endif
 
+                        @if(session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show mb-3">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        @endif
+
                         <!-- Login Form -->
-                        <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate>
+                        <form method="POST" action="{{ route('login.attempt') }}" class="needs-validation" novalidate>
                             @csrf
                             
                             <!-- Email Input -->
@@ -38,10 +44,13 @@
                                        value="{{ old('email') }}" 
                                        placeholder="Enter your email" 
                                        required 
+                                       autocomplete="email"
                                        autofocus>
                                 <label for="email">Email address</label>
                                 @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </div>
                                 @enderror
                             </div>
 
@@ -52,11 +61,28 @@
                                        class="form-control @error('password') is-invalid @enderror" 
                                        name="password" 
                                        placeholder="Enter your password" 
-                                       required>
+                                       required
+                                       autocomplete="current-password">
                                 <label for="password">Password</label>
                                 @error('password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </div>
                                 @enderror
+                            </div>
+
+                            <!-- Remember Me Checkbox -->
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           name="remember" 
+                                           id="remember"
+                                           {{ old('remember') ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="remember">
+                                        {{ __('Remember Me') }}
+                                    </label>
+                                </div>
                             </div>
 
                             <!-- Submit Button -->
@@ -77,20 +103,33 @@
                         </form>
                     </div>
                 </div>
+
+                <!-- Optional: Registration Link -->
+                @if (Route::has('register'))
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? 
+                            <a href="{{ route('register') }}" class="text-decoration-none">
+                                Register Here
+                            </a>
+                        </p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
 </main>
-
 @endsection
 
 @push('scripts')
 <script src="{{ asset('js/password-reset.js') }}" defer></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        initializePasswordReset('{{ route("password.email") }}', '{{ csrf_token() }}');
+        // Password Reset Initialization (if applicable)
+        @if(Route::has('password.email'))
+            initializePasswordReset('{{ route("password.email") }}', '{{ csrf_token() }}');
+        @endif
         
-        // Form validation
+        // Client-side Form Validation
         const forms = document.querySelectorAll('.needs-validation');
         Array.from(forms).forEach(form => {
             form.addEventListener('submit', event => {
@@ -100,6 +139,25 @@
                 }
                 form.classList.add('was-validated');
             }, false);
+        });
+
+        // Optional: Password Visibility Toggle
+        const passwordInput = document.getElementById('password');
+        const togglePassword = document.createElement('button');
+        togglePassword.innerHTML = '<i class="bi bi-eye"></i>';
+        togglePassword.classList.add('btn', 'btn-outline-secondary', 'position-absolute', 'end-0', 'top-50', 'translate-middle-y', 'me-2');
+        togglePassword.type = 'button';
+        togglePassword.style.zIndex = '5';
+
+        passwordInput.parentNode.style.position = 'relative';
+        passwordInput.parentNode.appendChild(togglePassword);
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' 
+                ? '<i class="bi bi-eye"></i>' 
+                : '<i class="bi bi-eye-slash"></i>';
         });
     });
 </script>
