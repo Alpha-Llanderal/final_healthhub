@@ -34,22 +34,6 @@ class User extends Authenticatable
         'is_self_pay' => 'boolean'
     ];
 
-    // Relationships
-       public function appointments()
-    {
-        return $this->hasMany(Appointment::class);
-    }
-
-    public function medicalRecords()
-    {
-        return $this->hasMany(MedicalRecord::class);
-    }
-
-    public function insurances()
-    {
-        return $this->hasMany(Insurance::class);
-    }
-
     // Password Mutator using Laravel 9+ Attribute Casting
     protected function password(): Attribute
     {
