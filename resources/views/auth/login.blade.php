@@ -17,16 +17,18 @@
                         </div>
 
                         <!-- Success and Error Messages -->
-                        @if(session('success'))
+                        @if(session('status'))
                             <div class="alert alert-success alert-dismissible fade show mb-3">
-                                {{ session('success') }}
+                                {{ session('status') }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
 
-                        @if(session('error'))
+                        @if($errors->any())
                             <div class="alert alert-danger alert-dismissible fade show mb-3">
-                                {{ session('error') }}
+                                @foreach ($errors->all() as $error)
+                                    <p class="mb-0">{{ $error }}</p>
+                                @endforeach
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
@@ -36,7 +38,7 @@
                             @csrf
                             
                             <!-- Email Input -->
-                            <div class="form-floating mb-3">
+                            <div class="form-floating mb-3 position-relative">
                                 <input type="email" 
                                        id="email"
                                        class="form-control @error('email') is-invalid @enderror" 
@@ -55,7 +57,7 @@
                             </div>
 
                             <!-- Password Input -->
-                            <div class="form-floating mb-3">
+                            <div class="form-floating mb-3 position-relative">
                                 <input type="password" 
                                        id="password"
                                        class="form-control @error('password') is-invalid @enderror" 
@@ -71,21 +73,28 @@
                                 @enderror
                             </div>
 
+                            <!-- Remember Me Checkbox -->
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" name="remember" id="remember" 
+                                    {{ old('remember') ? 'checked' : '' }}>
+                                <label class="form-check-label" for="remember">
+                                    Remember Me
+                                </label>
+                            </div>
+
                             <!-- Submit Button -->
-                            <div class="d-grid gap-2">
+                            <div class="d-grid gap-2 mb-3">
                                 <button type="submit" class="btn btn-success btn-lg">
                                     <i class="bi bi-box-arrow-in-right me-2"></i>Login
                                 </button>
                             </div>
 
                             <!-- Password Reset Link -->
-                            @if (Route::has('password.request'))
-                                <div class="text-center mt-3">
-                                    <a href="{{ route('password.request') }}" class="text-decoration-none">
-                                        Forgot Your Password?
-                                    </a>
-                                </div>
-                            @endif
+                            <div class="text-center">
+                                <a href="{{ route('password.request') }}" class="text-decoration-none">
+                                    <i class="bi bi-unlock me-2"></i>Forgot Your Password?
+                                </a>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -106,3 +115,40 @@
 </main>
 @endsection
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form Validation
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+
+    // Password Visibility Toggle
+    const passwordInput = document.getElementById('password');
+    const passwordContainer = passwordInput.closest('.form-floating');
+    
+    const togglePassword = document.createElement('button');
+    togglePassword.innerHTML = '<i class="bi bi-eye"></i>';
+    togglePassword.classList.add('btn', 'btn-outline-secondary', 'position-absolute', 'end-0', 'top-50', 'translate-middle-y', 'me-2', 'z-3');
+    togglePassword.type = 'button';
+    togglePassword.style.zIndex = '5';
+
+    passwordContainer.appendChild(togglePassword);
+
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.innerHTML = type === 'password' 
+            ? '<i class="bi bi-eye"></i>' 
+            : '<i class="bi bi-eye-slash"></i>';
+    });
+});
+</script>
+@endpush

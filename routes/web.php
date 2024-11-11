@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PrivacyPolicyController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 // Remove any unclosed groups or middleware
 Route::get('/', function () {
@@ -38,4 +40,14 @@ Route::middleware(['auth'])->group(function () {
          ->name('dashboard.preferences');
     Route::get('/dashboard/medical-info', [DashboardController::class, 'quickMedicalInfo'])
          ->name('dashboard.medical-info');
+
+         // Password Reset Routes
+Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])
+->name('password.request');
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+->name('password.email');
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])
+->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])
+->name('password.update');
 });
